@@ -1,0 +1,20 @@
+{
+  "name": "vibe-safety",
+  "owner": {
+    "name": "vibe-safety",
+    "url": "https://github.com/vibe-safety"
+  },
+  "metadata": {
+    "description": "Плагины безопасности для тех, кто делает сайты, приложения и ботов с ИИ"
+  },
+  "plugins": [
+    {
+      "name": "vibe-check",
+      "source": "./vibe-check",
+      "description": "Проверка безопасности проекта перед запуском: 115 пунктов простым языком, автоматическая защита от утечки ключей, выдуманных библиотек и удаления боевой базы",
+      "version": "0.1.0",
+      "category": "security",
+      "keywords": ["security", "vibe-coding", "checklist", "supabase", "stripe", "безопасность"]
+    }
+  ]
+}
