@@ -12,14 +12,14 @@
 В Claude Code (в терминале или в приложении):
 
 ```
-/plugin marketplace add vibe-safety/vibe-check
+/plugin marketplace add https://github.com/vibe-safety/vibe-check.git
 /plugin install vibe-check@vibe-safety
 ```
 
 Или из обычного терминала:
 
 ```bash
-claude plugin marketplace add vibe-safety/vibe-check
+claude plugin marketplace add https://github.com/vibe-safety/vibe-check.git
 claude plugin install vibe-check@vibe-safety
 ```
 
