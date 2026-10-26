@@ -1,6 +1,8 @@
 'use strict';
 // Проверка пакетов перед установкой: существует ли, давно ли появился, популярен ли, не опечатка ли.
 
+const { t } = require('./i18n');
+
 const POPULAR = {
   npm: ['react', 'react-dom', 'next', 'vue', 'nuxt', 'svelte', 'vite', 'typescript', 'express', 'fastify', 'axios', 'lodash',
     'zod', 'prisma', '@prisma/client', 'drizzle-orm', 'tailwindcss', 'postcss', 'autoprefixer', 'eslint', 'prettier', 'jest', 'vitest',
@@ -101,17 +103,20 @@ async function checkPackage(name, ecosystem) {
 
   if (r.exists === false) {
     r.level = 'deny';
-    r.problems.push(`пакета «${name}» не существует в ${ecosystem}. Скорее всего, ИИ выдумал название — а злоумышленники регистрируют такие названия с вредоносным кодом (пункт 57)`);
+    r.problems.push(t({
+      en: `package "${name}" does not exist in ${ecosystem}. AI most likely made up the name, and attackers register such names with malicious code (check 57)`,
+      ru: `пакета «${name}» не существует в ${ecosystem}. Скорее всего, ИИ выдумал название — а злоумышленники регистрируют такие названия с вредоносным кодом (пункт 57)`,
+    }));
   } else if (r.exists === undefined) {
     r.level = 'unknown';
   } else {
-    if (r.ageDays !== undefined && r.ageDays < 30) r.problems.push(`пакет появился всего ${r.ageDays} дн. назад`);
-    if (r.weeklyDownloads !== undefined && r.weeklyDownloads < 50) r.problems.push(`у пакета всего ${r.weeklyDownloads} скачиваний в неделю`);
-    if (r.releases !== undefined && r.releases < 2 && r.ageDays !== undefined && r.ageDays < 180) r.problems.push('у пакета одна версия и он новый');
+    if (r.ageDays !== undefined && r.ageDays < 30) r.problems.push(t({ en: `the package appeared only ${r.ageDays} days ago`, ru: `пакет появился всего ${r.ageDays} дн. назад` }));
+    if (r.weeklyDownloads !== undefined && r.weeklyDownloads < 50) r.problems.push(t({ en: `the package has only ${r.weeklyDownloads} downloads a week`, ru: `у пакета всего ${r.weeklyDownloads} скачиваний в неделю` }));
+    if (r.releases !== undefined && r.releases < 2 && r.ageDays !== undefined && r.ageDays < 180) r.problems.push(t({ en: 'the package is new and has a single version', ru: 'у пакета одна версия и он новый' }));
     if (r.problems.length) r.level = 'ask';
   }
   if (r.lookalike && r.level !== 'deny') {
-    r.problems.push(`название очень похоже на популярный «${r.lookalike}» — проверь, нет ли опечатки`);
+    r.problems.push(t({ en: `the name is very close to the popular "${r.lookalike}": check for a typo`, ru: `название очень похоже на популярный «${r.lookalike}» — проверь, нет ли опечатки` }));
     r.level = 'ask';
   }
   return r;

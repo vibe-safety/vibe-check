@@ -1,28 +1,28 @@
 ---
 name: site
-description: Проверяет живой сайт пользователя по адресу — только чтение, около 20 запросов: HTTPS, защитные заголовки, куки, CORS, открытые файлы .env и .git, source maps, почтовые записи домена. Используй, когда пользователь просит проверить свой опубликованный сайт или пишет /vibe-check:site <адрес>.
-argument-hint: "<https://адрес-сайта>"
+description: Checks the user's live website by its address, read-only, about 20 requests: HTTPS, security headers, cookies, CORS, exposed .env and .git files, source maps, domain email records. Use when the user asks to check their published site or types /vibe-check:site <address> (проверить живой сайт).
+argument-hint: "<https://site-address>"
 ---
 
-# vibe-check: проверка живого сайта
+# vibe-check: live site check
 
-Аргументы: `$ARGUMENTS` — адрес сайта.
+Arguments: `$ARGUMENTS` — the site address.
 
-Скрипт: `<корень плагина>/scripts/probe-url.js`, корень — на два уровня выше папки этого скилла (строка «Base directory for this skill»).
+Script: `<plugin root>/scripts/probe-url.js`; the root is two levels up from this skill's folder (the "Base directory for this skill" line). Its output is in English; retell the results **in the user's language**, using `catalog/checklist.en.md` or `checklist.ru.md` for the check descriptions.
 
-## Правила
+## Rules
 
-- Проверяй **только сайт пользователя**. Если адрес не встречается в проекте (README, `package.json`, `vercel.json`, переменные с адресом сайта) и пользователь не сказал, что сайт его, спроси: «Это твой сайт?» Чужие сайты не проверяй.
-- Скрипт только читает (GET/HEAD) и делает около 20 запросов. Ничего не отправляй в формы и не пробуй входить.
-- Если нашёлся открытый `.env` или ключ в коде страницы, не открывай и не выводи его содержимое — только сам факт и что делать.
+- Check **only the user's own site**. If the address isn't in the project (README, `package.json`, `vercel.json`, site URL variables) and the user didn't say it's theirs, ask: "Is this your site?" Don't check other people's sites.
+- The script only reads (GET/HEAD) and makes about 20 requests. Don't submit forms or try to log in.
+- If an open `.env` or a key in the page code turns up, don't open or print its contents: only the fact and what to do.
 
-## Порядок
+## Order
 
-1. Если адреса нет в аргументах — спроси его.
-2. Запусти:
+1. If there's no address in the arguments, ask for it.
+2. Run:
    ```bash
-   node "<корень>/scripts/probe-url.js" "<адрес>"
+   node "<root>/scripts/probe-url.js" "<address>"
    ```
-3. Перескажи результаты простыми словами по пунктам каталога (`check` — номер пункта): сначала ❌, потом ⚠️, потом коротко, что в порядке. Для каждой проблемы: что это значит для посетителей и бизнеса, и как исправить на их хостинге (Vercel: `vercel.json` → `headers`; Netlify: `_headers` / `netlify.toml`; Next.js: `headers()` в `next.config`; Cloudflare: Transform Rules).
-4. Если в проекте есть `.vibe-check/report-*.md` за сегодня — допиши раздел «Живой сайт» в него, иначе создай `.vibe-check/site-ГГГГ-ММ-ДД.md`.
-5. Открытые `.env`, `.git` или ключ в странице — это 🔴: скажи закрыть доступ и **перевыпустить все ключи**, которые там могли быть.
+3. Retell the results in plain words by checklist item (`check` is the item number): first ❌, then ⚠️, then briefly what's fine. For each problem: what it means for visitors and the business, and how to fix it on their hosting (Vercel: `vercel.json` → `headers`; Netlify: `_headers` / `netlify.toml`; Next.js: `headers()` in `next.config`; Cloudflare: Transform Rules).
+4. If the project has a `.vibe-check/report-*.md` from today, add a "Live site" section to it; otherwise create `.vibe-check/site-YYYY-MM-DD.md`.
+5. An open `.env`, `.git` or a key in the page is 🔴: tell them to close access and **issue new keys** for everything that might have been there.

@@ -5,16 +5,22 @@
     "url": "https://github.com/vibe-safety"
   },
   "metadata": {
-    "description": "Плагины безопасности для тех, кто делает сайты, приложения и ботов с ИИ"
+    "description": "Security plugins for people who build websites, apps and bots with AI"
   },
   "plugins": [
     {
       "name": "vibe-check",
       "source": "./vibe-check",
-      "description": "Проверка безопасности проекта перед запуском: 115 пунктов простым языком, автоматическая защита от утечки ключей, выдуманных библиотек и удаления боевой базы",
-      "version": "0.1.0",
+      "description": "Pre-launch security check for vibe coders, in English and Russian: 115 checks in plain words, a report with file and line, automatic protection against leaked keys, made-up libraries and deleting the live database",
+      "version": "0.2.0",
       "category": "security",
-      "keywords": ["security", "vibe-coding", "checklist", "supabase", "stripe", "безопасность"]
+      "keywords": [
+        "security",
+        "vibe-coding",
+        "checklist",
+        "owasp",
+        "безопасность"
+      ]
     }
   ]
 }

@@ -1,76 +1,81 @@
-# vibe-check — проверка безопасности для вайбкодеров
+# vibe-check — security check for vibe coders
 
-Плагин для Claude Code. Проверяет сайт, сервис, мобильное приложение или Telegram-бота перед запуском и объясняет найденное простыми словами. Рассчитан на тех, кто собирает проекты с ИИ и не является программистом.
+**English** · [Русский](README.ru.md)
 
-- **115 проверок** по мотивам OWASP Top 10, OWASP Top 10 для ИИ-приложений, OWASP Mobile Top 10, реальных взломов проектов на Lovable/Supabase и требований 152-ФЗ.
-- **Сам понимает, что за проект**, и проверяет только нужное: лендингу не нужны проверки оплаты.
-- **Отчёт** с файлом и строкой, объяснением «что может случиться» и командой для исправления.
-- **Защищает на лету**, без команд: не даёт записать секретный ключ в код, поставить выдуманную ИИ библиотеку, отправить `.env` на GitHub, удалить боевую базу без подтверждения.
+A Claude Code plugin. It checks your website, web service, mobile app or Telegram bot before launch and explains what it finds in plain words. Made for people who build with AI and aren't programmers.
 
-## Установка
+- **115 checks** based on the OWASP Top 10, the OWASP Top 10 for LLM Applications, the OWASP Mobile Top 10, real breaches of projects built on Lovable/Supabase, and privacy laws (GDPR, Russia's 152-FZ).
+- **Figures out what you built** and checks only what matters: a landing page doesn't need payment checks.
+- **A report** with file and line, "what can happen" in everyday words, and a command to fix it.
+- **Guards you as you go**, no commands needed: it stops a secret key from being written into code, a made-up library from being installed, `.env` from going to GitHub, and the live database from being deleted without your confirmation.
+- **English and Russian**: commands answer in the language you write in.
 
-В Claude Code (в терминале или в приложении):
+## Install
+
+In Claude Code (terminal or desktop app):
 
 ```
 /plugin marketplace add https://github.com/vibe-safety/vibe-check.git
 /plugin install vibe-check@vibe-safety
 ```
 
-Или из обычного терминала:
+Or from a regular terminal:
 
 ```bash
 claude plugin marketplace add https://github.com/vibe-safety/vibe-check.git
 claude plugin install vibe-check@vibe-safety
 ```
 
-После установки перезапустите Claude Code. Нужен Node.js 18+ (он почти всегда уже есть, если вы делали сайт).
+Restart Claude Code after installing. Requires Node.js 18+ (you almost certainly have it if you've built a website).
 
-## Команды
+## Commands
 
-| Команда | Что делает |
+| Command | What it does |
 |---|---|
-| `/vibe-check:scan` | Полная проверка проекта и отчёт в `.vibe-check/` |
-| `/vibe-check:site https://мой-сайт.ru` | Проверка опубликованного сайта (только чтение, только свой сайт) |
-| `/vibe-check:fix 11` | Исправить пункт 11 из отчёта (объяснит, что меняет, и спросит) |
-| `/vibe-check:explain RLS` | Объяснить любой пункт простыми словами; `… пост` — сделать текст для соцсетей |
+| `/vibe-check:scan` | Full project check, report saved to `.vibe-check/` |
+| `/vibe-check:site https://my-site.com` | Checks your published site (read-only, your own site only) |
+| `/vibe-check:fix 11` | Fixes check 11 from the report (explains what it will change and asks first) |
+| `/vibe-check:explain RLS` | Explains any check in plain words; add `post` to get a social media post |
 
-Можно и без команд: «проверь проект перед запуском», «что такое IDOR?».
+You can also just ask: "check my project before launch", "what is IDOR?".
 
-## Что происходит автоматически
+## What happens automatically
 
-| Когда | Что проверяется |
+| When | What is checked |
 |---|---|
-| ИИ пишет или правит файл | Нет ли в нём секретного ключа (OpenAI, Anthropic, Stripe, Supabase service_role, Telegram, AWS, GitHub…) и нет ли секрета в «публичной» переменной `NEXT_PUBLIC_` / `VITE_` / `EXPO_PUBLIC_` |
-| ИИ устанавливает библиотеку | Существует ли она, не появилась ли вчера, не опечатка ли в названии популярной |
-| `git commit` / `git push` | Не уходят ли на GitHub ключи и файлы `.env` |
-| Опасная команда | Удаление таблиц и базы, сброс базы, `rm -rf`, force-push, деплой на боевой: сначала спросит |
-| Начало работы | Если в проекте есть оплата, ИИ или личный кабинет, а проверки давно не было — один раз напомнит |
+| AI writes or edits a file | No secret key in it (OpenAI, Anthropic, Stripe, Supabase service_role, Telegram, AWS, GitHub…) and no secret in a "public" variable `NEXT_PUBLIC_` / `VITE_` / `EXPO_PUBLIC_` |
+| AI installs a library | It exists, didn't appear yesterday, and isn't a typo of a popular name |
+| `git commit` / `git push` | No keys or `.env` files going to GitHub |
+| A dangerous command | Dropping tables or the database, database resets, `rm -rf`, force-push, deploying to live: asks first |
+| Session start | If the project has payments, AI or user accounts and hasn't been checked lately, reminds you once |
 
-## Настройки
+## Settings
 
-Файл `.vibe-check/config.json` в папке проекта (необязательный):
+Optional `.vibe-check/config.json` in your project folder:
 
 ```json
 {
   "mode": "block",
   "allowPackages": ["my-internal-package"],
   "ignorePaths": ["fixtures/"],
-  "sessionHint": true
+  "sessionHint": true,
+  "lang": "en"
 }
 ```
 
-`mode`: `block` — опасное запрещается (по умолчанию), `warn` — спрашивать, `off` — автоматические проверки выключены.
+`mode`: `block` stops dangerous actions (default), `warn` asks, `off` turns automatic checks off.
+`lang`: `en` or `ru`, the language of automatic guard messages (defaults to your system language). Commands answer in the language you write in.
 
-## Чек-лист
+## Checklist
 
-Все 115 пунктов с объяснениями: [vibe-check/catalog/checklist.md](vibe-check/catalog/checklist.md). Можно использовать отдельно от плагина: как памятку, для постов, для обучения.
+All 115 checks with explanations: [vibe-check/catalog/checklist.en.md](vibe-check/catalog/checklist.en.md) (Russian: [checklist.ru.md](vibe-check/catalog/checklist.ru.md)). Use it on its own too: as a reminder, for posts, for teaching.
 
-## Ограничения
+## Limitations
 
-- Плагин находит типовые ошибки, но не заменяет аудит специалиста. Если проект работает с деньгами или чувствительными данными многих людей, покажите его профессионалу.
-- Раздел про законы — ориентир, а не юридическая консультация.
-- Проверка живого сайта — только для своих сайтов.
+- The plugin finds common mistakes but doesn't replace a professional audit. If your project handles money or sensitive data of many people, have an expert look at it.
+- The legal section is guidance, not legal advice.
+- The live site check is for your own sites only.
 
-## Лицензия
+## License
 
 MIT

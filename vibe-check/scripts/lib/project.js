@@ -112,7 +112,7 @@ function exists(root, rel) {
 
 // Признаки России: lang="ru", кириллица в интерфейсе, рубли, домен .ru/.рф.
 function detectRussia(root) {
-  const kinds = { 'lang="ru"': [], 'рубли': [], 'домен .ru/.рф': [], 'русский текст': [] };
+  const kinds = { 'lang="ru"': [], 'rubles': [], '.ru/.рф domain': [], 'Russian text': [] };
   for (const f of walk(root, { maxFiles: 400 })) {
     if (f.inBuild || !/\.(jsx|tsx|vue|svelte|astro|html|py)$/i.test(f.rel)) continue;
     let text;
@@ -122,14 +122,14 @@ function detectRussia(root) {
       continue;
     }
     if (/lang=["']ru["']/.test(text)) kinds['lang="ru"'].push(f.rel);
-    if (/₽|\bRUB\b|руб\./.test(text)) kinds['рубли'].push(f.rel);
-    if (/https?:\/\/[^\s"'`]+\.(ru|рф)\b/.test(text)) kinds['домен .ru/.рф'].push(f.rel);
-    if ((text.match(/[а-яё]{4,}/gi) || []).length > 5) kinds['русский текст'].push(f.rel);
+    if (/₽|\bRUB\b|руб\./.test(text)) kinds['rubles'].push(f.rel);
+    if (/https?:\/\/[^\s"'`]+\.(ru|рф)\b/.test(text)) kinds['.ru/.рф domain'].push(f.rel);
+    if ((text.match(/[а-яё]{4,}/gi) || []).length > 5) kinds['Russian text'].push(f.rel);
   }
-  if (kinds['русский текст'].length < 3) kinds['русский текст'] = [];
+  if (kinds['Russian text'].length < 3) kinds['Russian text'] = [];
   const signals = Object.entries(kinds)
     .filter(([, files]) => files.length)
-    .map(([kind, files]) => `${kind} (${files.length === 1 ? files[0] : 'в ' + files.length + ' файлах'})`);
+    .map(([kind, files]) => `${kind} (${files.length === 1 ? files[0] : 'in ' + files.length + ' files'})`);
   return { isRussia: signals.length > 0, signals };
 }
 
@@ -140,15 +140,15 @@ function detectStack(root, { withRussia = true } = {}) {
   for (const m of catalog.modules) {
     if (m.onDemand) continue;
     if (m.always) {
-      modules.push({ id: m.id, title: m.title, reasons: ['всегда'] });
+      modules.push({ id: m.id, title: m.title, reasons: ['always'] });
       continue;
     }
     if (m.id === 'russia') continue;
     const reasons = [];
-    for (const d of m.deps || []) if (deps.has(d.toLowerCase())) reasons.push(`зависимость ${d}`);
-    for (const f of m.files || []) if (exists(root, f)) reasons.push(`файл ${f}`);
+    for (const d of m.deps || []) if (deps.has(d.toLowerCase())) reasons.push(`dependency ${d}`);
+    for (const f of m.files || []) if (exists(root, f)) reasons.push(`file ${f}`);
     // мобильное: android/ios одни ничего не значат без expo/react-native/capacitor/flutter
-    if (m.id === 'mobile' && reasons.length && !reasons.some((r) => r.startsWith('зависимость'))) {
+    if (m.id === 'mobile' && reasons.length && !reasons.some((r) => r.startsWith('dependency'))) {
       if (!exists(root, 'app.json') || !deps.has('expo')) continue;
     }
     if (reasons.length) modules.push({ id: m.id, title: m.title, reasons: reasons.slice(0, 4) });

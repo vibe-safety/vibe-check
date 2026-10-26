@@ -5,7 +5,8 @@ const path = require('path');
 // Настройки проекта: <проект>/.vibe-check/config.json
 // mode: "block" — опасное запрещается (по умолчанию), "warn" — спрашивать, "off" — хуки молчат.
 // allowPackages: пакеты, которые проверять не нужно. ignorePaths: части путей, которые не сканировать.
-const DEFAULTS = { mode: 'block', allowPackages: [], ignorePaths: [] };
+// lang: "en" | "ru" — язык сообщений защиты; по умолчанию берётся из системы.
+const DEFAULTS = { mode: 'block', allowPackages: [], ignorePaths: [], lang: null };
 
 function loadConfig(cwd) {
   let cfg = { ...DEFAULTS };

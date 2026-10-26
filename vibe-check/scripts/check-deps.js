@@ -8,6 +8,7 @@ const { execFileSync } = require('child_process');
 const { checkPackage } = require('./lib/packages');
 const { readJson } = require('./lib/project');
 const { loadConfig } = require('./lib/config');
+require('./lib/i18n').setLang('en'); // output is data for Claude
 
 const root = path.resolve(process.argv[2] || process.cwd());
 const cfg = loadConfig(root);
@@ -29,7 +30,7 @@ for (const f of ['requirements.txt', 'requirements-dev.txt']) {
 }
 pyDeps = [...new Set(pyDeps)];
 
-if ((npmDeps.length || pyDeps.length) && !report.lockfiles.length) report.problems.push({ check: 58, text: 'нет lockfile — версии библиотек не зафиксированы' });
+if ((npmDeps.length || pyDeps.length) && !report.lockfiles.length) report.problems.push({ check: 58, text: 'no lockfile: library versions are not locked' });
 
 // npm audit
 if (pkg && report.lockfiles.includes('package-lock.json')) {
@@ -45,13 +46,13 @@ if (pkg && report.lockfiles.includes('package-lock.json')) {
     const top = Object.values(j.vulnerabilities || {})
       .filter((x) => x.severity === 'critical' || x.severity === 'high')
       .slice(0, 15)
-      .map((x) => ({ name: x.name, severity: x.severity, direct: x.isDirect, fix: x.fixAvailable ? (x.fixAvailable === true ? 'npm audit fix' : `обновить ${x.fixAvailable.name} до ${x.fixAvailable.version}`) : 'исправления пока нет' }));
+      .map((x) => ({ name: x.name, severity: x.severity, direct: x.isDirect, fix: x.fixAvailable ? (x.fixAvailable === true ? 'npm audit fix' : `update ${x.fixAvailable.name} to ${x.fixAvailable.version}`) : 'no fix available yet' }));
     report.audit = { tool: 'npm audit', counts: v, top };
   } catch {
-    report.audit = { tool: 'npm audit', error: 'не удалось запустить npm audit (нет интернета или npm)' };
+    report.audit = { tool: 'npm audit', error: 'could not run npm audit (no internet or npm)' };
   }
 } else if (pkg) {
-  report.audit = { tool: 'npm audit', error: 'нет package-lock.json: npm audit работает только с ним. Можно создать командой npm install --package-lock-only' };
+  report.audit = { tool: 'npm audit', error: 'no package-lock.json: npm audit needs it. Create one with npm install --package-lock-only' };
 }
 
 // Существование и «подозрительность» пакетов
@@ -66,7 +67,7 @@ async function main() {
       const p = queue.shift();
       const r = await checkPackage(p.name, p.ecosystem);
       if (r.level === 'deny' || r.level === 'ask') report.packages.push({ name: r.name, ecosystem: r.ecosystem, level: r.level, problems: r.problems, ageDays: r.ageDays, weeklyDownloads: r.weeklyDownloads });
-      else if (r.level === 'unknown') report.packages.push({ name: r.name, ecosystem: r.ecosystem, level: 'unknown', problems: ['не удалось проверить (нет ответа реестра)'] });
+      else if (r.level === 'unknown') report.packages.push({ name: r.name, ecosystem: r.ecosystem, level: 'unknown', problems: ['could not check (no answer from the registry)'] });
     }
   });
   await Promise.all(workers);

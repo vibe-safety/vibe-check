@@ -9,6 +9,7 @@ const { execFileSync } = require('child_process');
 const { walk } = require('./lib/project');
 const { scanText, isSecretsFile, isExampleEnvFile } = require('./lib/patterns');
 const { loadConfig } = require('./lib/config');
+require('./lib/i18n').setLang('en'); // output is data for Claude
 
 const args = process.argv.slice(2);
 const root = path.resolve(args.find((a) => !a.startsWith('--')) || process.cwd());
@@ -33,7 +34,7 @@ for (const f of walk(root, { ignorePaths: cfg.ignorePaths })) {
   const secretsFile = isSecretsFile(f.rel);
   if (secretsFile) report.envFiles.push(f.rel);
   const found = scanText(text, { secretsFile });
-  if (isExampleEnvFile(f.rel)) for (const x of scanText(text)) if (x.rule !== 'public-env' && x.severity === 'high') found.push({ ...x, name: x.name + ' в файле-примере' });
+  if (isExampleEnvFile(f.rel)) for (const x of scanText(text)) if (x.rule !== 'public-env' && x.severity === 'high') found.push({ ...x, name: x.name + ' in an example file' });
   for (const x of found) {
     if (x.value) currentValues.add(x.value);
     report.findings.push({
@@ -43,7 +44,7 @@ for (const f of walk(root, { ignorePaths: cfg.ignorePaths })) {
       severity: x.severity,
       what: x.name,
       preview: x.preview,
-      where: f.inBuild ? 'собранный код (видит любой посетитель)' : f.isPublicDir ? 'папка public (видит любой посетитель)' : 'исходный код',
+      where: f.inBuild ? 'built code (any visitor can see it)' : f.isPublicDir ? 'public folder (any visitor can see it)' : 'source code',
       note: x.note,
     });
   }

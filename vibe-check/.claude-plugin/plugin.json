@@ -1,10 +1,18 @@
 {
   "name": "vibe-check",
-  "version": "0.1.0",
-  "description": "Проверка безопасности проекта перед запуском для вайбкодеров: 115 пунктов простым языком, отчёт с файлом и строкой, автоматическая защита от утечки ключей, выдуманных библиотек и удаления боевой базы",
+  "version": "0.2.0",
+  "description": "Pre-launch security check for vibe coders, in English and Russian: 115 checks in plain words, a report with file and line, automatic protection against leaked keys, made-up libraries and deleting the live database",
   "author": {
     "name": "vibe-safety",
     "url": "https://github.com/vibe-safety"
   },
-  "keywords": ["security", "vibe-coding", "checklist", "launch", "безопасность"]
+  "keywords": [
+    "security",
+    "vibe-coding",
+    "checklist",
+    "launch",
+    "owasp",
+    "supabase",
+    "stripe"
+  ]
 }

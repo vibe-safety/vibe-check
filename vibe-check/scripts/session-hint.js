@@ -1,12 +1,13 @@
 #!/usr/bin/env node
 'use strict';
-// Хук SessionStart: если в проекте есть аккаунты/оплата/ИИ/приложение/бот, а полной проверки давно не было,
-// просит Claude один раз коротко предложить /vibe-check:scan.
+// SessionStart hook: if the project has accounts/payments/AI/an app/a bot and there hasn't been a full check lately,
+// asks Claude to suggest /vibe-check:scan once, briefly.
 const fs = require('fs');
 const path = require('path');
 const { readInput, safeMain } = require('./lib/hook-io');
 const { detectStack } = require('./lib/project');
 const { loadConfig } = require('./lib/config');
+const { setLang } = require('./lib/i18n');
 
 const RISKY = new Set(['accounts', 'payments', 'ai', 'mobile', 'bot', 'uploads']);
 
@@ -14,6 +15,7 @@ safeMain(async () => {
   const input = await readInput();
   const cwd = input.cwd || process.cwd();
   const cfg = loadConfig(cwd);
+  setLang('en'); // this text is for Claude; Claude talks to the user in the user's language
   if (cfg.mode === 'off' || cfg.sessionHint === false) return;
 
   const stack = detectStack(cwd, { withRussia: false });
@@ -29,10 +31,10 @@ safeMain(async () => {
   if (days !== null && days < 14) return;
 
   const what = risky.map((m) => m.title.toLowerCase()).join(', ');
-  const when = days === null ? 'Проверки безопасности в этом проекте ещё не было' : `Последняя проверка безопасности была ${days} дн. назад`;
+  const when = days === null ? 'There has been no security check in this project yet' : `The last security check was ${days} days ago`;
   const context =
-    `[vibe-check] В проекте есть: ${what}. ${when}. ` +
-    'Один раз за сессию, в удобный момент и не перебивая текущую задачу, предложи пользователю одной строкой запустить /vibe-check:scan. ' +
-    'Если пользователь откажется, больше не напоминай.';
+    `[vibe-check] This project has: ${what}. ${when}. ` +
+    'Once per session, at a convenient moment and without interrupting the current task, suggest in one line (in the user\'s language) running /vibe-check:scan. ' +
+    'If the user declines, do not remind again.';
   process.stdout.write(JSON.stringify({ hookSpecificOutput: { hookEventName: 'SessionStart', additionalContext: context } }));
 });

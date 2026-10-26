@@ -1,36 +1,36 @@
 ---
 name: fix
-description: Исправляет найденную проблему безопасности из отчёта vibe-check по номеру пункта (например «/vibe-check:fix 11» или «почини все красные»). Объясняет простыми словами, что меняет, чинит и проверяет результат. Используй, когда пользователь просит исправить пункт из отчёта vibe-check или пишет «чини».
-argument-hint: "<номер пункта | все красные>"
+description: Fixes a security problem from the vibe-check report by check number (e.g. "/vibe-check:fix 11" or "fix all the red ones"). Explains in plain words what it will change, fixes it and verifies the result. Use when the user asks to fix an item from the vibe-check report or says "fix it" (почини, чини).
+argument-hint: "<check number | all red>"
 ---
 
-# vibe-check: исправление
+# vibe-check: fixing
 
-Аргументы: `$ARGUMENTS` — номер пункта (`11`), несколько номеров (`6 7 11`) или «все красные».
+Arguments: `$ARGUMENTS` — a check number (`11`), several numbers (`6 7 11`) or "all red".
 
-Корень плагина — на два уровня выше папки этого скилла (строка «Base directory for this skill»). Описание пунктов — в `<корень>/catalog/checklist.md`.
+The plugin root is two levels up from this skill's folder (the "Base directory for this skill" line). Check descriptions: `<root>/catalog/checklist.en.md` (Russian: `checklist.ru.md`). Talk to the user **in their language**.
 
-## Порядок
+## Order
 
-1. Найди самый свежий отчёт `.vibe-check/report-*.md` в проекте. Если его нет — скажи, что сначала нужен `/vibe-check:scan`, и остановись. Возьми из отчёта находки по нужным пунктам (файлы и строки).
-2. **Перед правкой** объясни в 2–3 предложениях простыми словами: что сейчас не так, что изменишь, на что это повлияет. Если исправление меняет поведение для пользователей (например, после включения RLS могут перестать показываться данные) — предупреди и дождись «да».
-3. Исправь минимально и точечно, в стиле существующего кода. Не переписывай то, что не относится к пункту.
-4. Проверь: перезапусти нужный сканер (`scan-secrets.js`, `check-deps.js`) или перечитай код; если есть тесты — запусти их.
-5. Обнови статус пункта в отчёте (❌ → ✅ с пометкой «исправлено <дата>»).
-6. Скажи, что изменилось, и — если нужно — что пользователь должен сделать сам.
+1. Find the latest report `.vibe-check/report-*.md` in the project. If there is none, say that `/vibe-check:scan` is needed first and stop. Take the findings for the requested checks (files and lines) from the report.
+2. **Before editing**, explain in 2–3 plain sentences what is wrong now, what you'll change and what it affects. If the fix changes behaviour for users (for example, after turning on RLS some data may stop showing), warn and wait for a "yes".
+3. Fix minimally and precisely, in the style of the existing code. Don't rewrite what doesn't belong to the check.
+4. Verify: rerun the relevant scanner (`scan-secrets.js`, `check-deps.js`) or re-read the code; run tests if there are any.
+5. Update the item's status in the report (❌ → ✅ with "fixed <date>").
+6. Say what changed and, if needed, what the user must do themselves.
 
-## Особые случаи
+## Special cases
 
-**Утёкший ключ (пункты 6–10).** Убрать ключ из кода недостаточно: он уже мог быть скопирован, а в истории git он останется.
-- Перенеси значение в `.env` (проверь, что `.env` в `.gitignore`), в коде читай его только на сервере.
-- Если ключ был в браузерном коде, перенеси вызов API в серверный код (API-роут, server action, edge function).
-- Скажи пользователю **перевыпустить ключ** в кабинете сервиса (OpenAI → API keys, Stripe → Developers → API keys, Supabase → Settings → API) и вставить новый в `.env` и в настройки хостинга. Сам ключи не создавай и не вставляй.
-- Чистить историю git (`git filter-repo`) — только если пользователь отдельно попросит и после перевыпуска ключа; это переписывает историю.
+**A leaked key (checks 6–10).** Removing the key from code isn't enough: it may already have been copied, and it stays in git history.
+- Move the value to `.env` (make sure `.env` is in `.gitignore`) and read it only on the server.
+- If the key was in browser code, move the API call to server code (API route, server action, edge function).
+- Tell the user to **issue a new key** in the service dashboard (OpenAI → API keys, Stripe → Developers → API keys, Supabase → Settings → API) and put it in `.env` and in the hosting settings. Never create or paste keys yourself.
+- Cleaning git history (`git filter-repo`) only if the user explicitly asks, and only after the key has been replaced; it rewrites history.
 
-**RLS в Supabase (пункт 11).** Пиши миграцию: `alter table ... enable row level security;` + политики по `auth.uid()` для select/insert/update/delete. Применять миграцию к боевой базе — только с подтверждения пользователя.
+**RLS in Supabase (check 11).** Write a migration: `alter table ... enable row level security;` + policies by `auth.uid()` for select/insert/update/delete. Apply the migration to the live database only after the user confirms.
 
-**Оплата (32–39).** После изменений предложи проверить в тестовом режиме платёжки: двойной клик, повторный вебхук, отмена.
+**Payments (32–39).** After the changes, suggest testing in the payment provider's test mode: double click, repeated webhook, cancellation.
 
-**Законы (107–114).** Ты не юрист: подготовь черновики (политика, согласие, галочка у формы) и прямо скажи, что их нужно сверить с юристом.
+**Laws (107–114).** You are not a lawyer: prepare drafts (policy, consent, checkbox next to the form) and say directly that a lawyer should review them.
 
-**Опасные действия.** Удаление данных, миграции на боевую базу, деплой, переписывание истории git — только после явного «да».
+**Dangerous actions.** Deleting data, migrations on the live database, deploys, rewriting git history: only after an explicit "yes".

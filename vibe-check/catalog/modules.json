@@ -1,72 +1,365 @@
 {
-  "_comment": "Модули проверки. checks — номера пунктов из checklist.md. deps — пакеты, по которым модуль включается; files — файлы и папки-признаки.",
+  "_comment": "Check modules. checks = item numbers from checklist.<lang>.md. deps = packages that turn the module on; files = marker files and folders. title_ru = Russian title.",
   "modules": [
     {
       "id": "core",
-      "title": "Ядро (любой проект)",
+      "title": "Core (any project)",
       "always": true,
-      "checks": [1, 2, 3, 4, 5, 6, 7, 8, 9, 40, 41, 45, 46, 47, 48, 49, 53, 54, 55, 56, 57, 58, 82, 83, 84, 85, 88, 102, 107, 108, 111]
+      "checks": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        40,
+        41,
+        45,
+        46,
+        47,
+        48,
+        49,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        82,
+        83,
+        84,
+        85,
+        88,
+        102,
+        107,
+        108,
+        111
+      ],
+      "title_ru": "Ядро (любой проект)"
     },
     {
       "id": "ai-dev",
-      "title": "Разработка с ИИ-агентом",
+      "title": "Building with an AI agent",
       "always": true,
-      "checks": [51, 59, 60, 61, 62, 63]
+      "checks": [
+        51,
+        59,
+        60,
+        61,
+        62,
+        63
+      ],
+      "title_ru": "Разработка с ИИ-агентом"
     },
     {
       "id": "accounts",
-      "title": "Аккаунты и база данных",
-      "checks": [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 42, 43, 50, 52, 86, 87, 106, 109, 110, 114],
-      "deps": ["@supabase/supabase-js", "@supabase/ssr", "@supabase/auth-helpers-nextjs", "firebase", "firebase-admin", "@prisma/client", "prisma", "drizzle-orm", "mongoose", "mongodb", "pg", "mysql2", "sequelize", "typeorm", "next-auth", "@auth/core", "@clerk/nextjs", "@clerk/clerk-react", "better-auth", "lucia", "appwrite", "pocketbase", "convex", "sqlalchemy", "django", "flask-login", "psycopg2", "psycopg2-binary", "psycopg", "supabase", "pymongo", "firebase_admin"],
-      "files": ["supabase", "firebase.json", "firestore.rules", "prisma/schema.prisma", "drizzle.config.ts", "drizzle.config.js"]
+      "title": "Accounts and database",
+      "checks": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        42,
+        43,
+        50,
+        52,
+        86,
+        87,
+        106,
+        109,
+        110,
+        114
+      ],
+      "deps": [
+        "@supabase/supabase-js",
+        "@supabase/ssr",
+        "@supabase/auth-helpers-nextjs",
+        "firebase",
+        "firebase-admin",
+        "@prisma/client",
+        "prisma",
+        "drizzle-orm",
+        "mongoose",
+        "mongodb",
+        "pg",
+        "mysql2",
+        "sequelize",
+        "typeorm",
+        "next-auth",
+        "@auth/core",
+        "@clerk/nextjs",
+        "@clerk/clerk-react",
+        "better-auth",
+        "lucia",
+        "appwrite",
+        "pocketbase",
+        "convex",
+        "sqlalchemy",
+        "django",
+        "flask-login",
+        "psycopg2",
+        "psycopg2-binary",
+        "psycopg",
+        "supabase",
+        "pymongo",
+        "firebase_admin"
+      ],
+      "files": [
+        "supabase",
+        "firebase.json",
+        "firestore.rules",
+        "prisma/schema.prisma",
+        "drizzle.config.ts",
+        "drizzle.config.js"
+      ],
+      "title_ru": "Аккаунты и база данных"
     },
     {
       "id": "payments",
-      "title": "Оплата",
-      "checks": [32, 33, 34, 35, 36, 37, 38, 39, 100, 112],
-      "deps": ["stripe", "@stripe/stripe-js", "@stripe/react-stripe-js", "@yookassa/sdk", "yookassa", "@a2seven/yoo-checkout", "cloudpayments", "tinkoff-api-v2", "@paddle/paddle-js", "@paddle/paddle-node-sdk", "@lemonsqueezy/lemonsqueezy.js", "paypal-rest-sdk", "@paypal/react-paypal-js", "robokassa", "stripe-python"],
-      "codeHints": ["yookassa", "cloudpayments", "tinkoff", "robokassa", "prodamus", "stripe"]
+      "title": "Payments",
+      "checks": [
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        100,
+        112
+      ],
+      "deps": [
+        "stripe",
+        "@stripe/stripe-js",
+        "@stripe/react-stripe-js",
+        "@yookassa/sdk",
+        "yookassa",
+        "@a2seven/yoo-checkout",
+        "cloudpayments",
+        "tinkoff-api-v2",
+        "@paddle/paddle-js",
+        "@paddle/paddle-node-sdk",
+        "@lemonsqueezy/lemonsqueezy.js",
+        "paypal-rest-sdk",
+        "@paypal/react-paypal-js",
+        "robokassa",
+        "stripe-python"
+      ],
+      "codeHints": [
+        "yookassa",
+        "cloudpayments",
+        "tinkoff",
+        "robokassa",
+        "prodamus",
+        "stripe"
+      ],
+      "title_ru": "Оплата"
     },
     {
       "id": "ai",
-      "title": "ИИ в продукте",
-      "checks": [3, 44, 64, 65, 66, 67, 68, 69, 70, 71, 91],
-      "deps": ["openai", "@anthropic-ai/sdk", "anthropic", "ai", "@ai-sdk/openai", "@ai-sdk/anthropic", "@ai-sdk/google", "@google/generative-ai", "@google/genai", "google-generativeai", "langchain", "@langchain/core", "@langchain/openai", "llamaindex", "llama-index", "groq-sdk", "@mistralai/mistralai", "replicate", "cohere-ai", "@pinecone-database/pinecone", "chromadb", "@qdrant/js-client-rest", "gigachat", "yandex-gpt", "@modelcontextprotocol/sdk"]
+      "title": "AI in the product",
+      "checks": [
+        3,
+        44,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        91
+      ],
+      "deps": [
+        "openai",
+        "@anthropic-ai/sdk",
+        "anthropic",
+        "ai",
+        "@ai-sdk/openai",
+        "@ai-sdk/anthropic",
+        "@ai-sdk/google",
+        "@google/generative-ai",
+        "@google/genai",
+        "google-generativeai",
+        "langchain",
+        "@langchain/core",
+        "@langchain/openai",
+        "llamaindex",
+        "llama-index",
+        "groq-sdk",
+        "@mistralai/mistralai",
+        "replicate",
+        "cohere-ai",
+        "@pinecone-database/pinecone",
+        "chromadb",
+        "@qdrant/js-client-rest",
+        "gigachat",
+        "yandex-gpt",
+        "@modelcontextprotocol/sdk"
+      ],
+      "title_ru": "ИИ в продукте"
     },
     {
       "id": "uploads",
-      "title": "Загрузка файлов",
-      "checks": [17, 43],
-      "deps": ["multer", "formidable", "busboy", "uploadthing", "@uploadthing/react", "react-dropzone", "@aws-sdk/client-s3", "cloudinary", "python-multipart"]
+      "title": "File uploads",
+      "checks": [
+        17,
+        43
+      ],
+      "deps": [
+        "multer",
+        "formidable",
+        "busboy",
+        "uploadthing",
+        "@uploadthing/react",
+        "react-dropzone",
+        "@aws-sdk/client-s3",
+        "cloudinary",
+        "python-multipart"
+      ],
+      "title_ru": "Загрузка файлов"
     },
     {
       "id": "mobile",
-      "title": "Мобильное приложение",
-      "checks": [72, 73, 74, 75, 76, 77, 78],
-      "deps": ["expo", "react-native", "@capacitor/core", "@ionic/react", "flutter"],
-      "files": ["app.json", "eas.json", "capacitor.config.ts", "capacitor.config.json", "pubspec.yaml", "android", "ios"]
+      "title": "Mobile app",
+      "checks": [
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78
+      ],
+      "deps": [
+        "expo",
+        "react-native",
+        "@capacitor/core",
+        "@ionic/react",
+        "flutter"
+      ],
+      "files": [
+        "app.json",
+        "eas.json",
+        "capacitor.config.ts",
+        "capacitor.config.json",
+        "pubspec.yaml",
+        "android",
+        "ios"
+      ],
+      "title_ru": "Мобильное приложение"
     },
     {
       "id": "bot",
-      "title": "Telegram-бот и автоматизации",
-      "checks": [3, 6, 7, 8, 9, 64, 65, 79, 80, 81],
-      "deps": ["telegraf", "grammy", "node-telegram-bot-api", "aiogram", "python-telegram-bot", "pytelegrambotapi", "telebot", "discord.js", "@slack/bolt", "n8n"]
+      "title": "Telegram bot and automations",
+      "checks": [
+        3,
+        6,
+        7,
+        8,
+        9,
+        64,
+        65,
+        79,
+        80,
+        81
+      ],
+      "deps": [
+        "telegraf",
+        "grammy",
+        "node-telegram-bot-api",
+        "aiogram",
+        "python-telegram-bot",
+        "pytelegrambotapi",
+        "telebot",
+        "discord.js",
+        "@slack/bolt",
+        "n8n"
+      ],
+      "title_ru": "Telegram-бот и автоматизации"
     },
     {
       "id": "russia",
-      "title": "Россия: 152-ФЗ",
-      "checks": [109, 110],
-      "_detect": "русский текст в интерфейсе, lang=\"ru\", домен .ru/.рф, рубли"
+      "title": "Russia: Federal Law 152-FZ",
+      "checks": [
+        109,
+        110
+      ],
+      "_detect": "Russian UI text, lang=\"ru\", .ru/.рф domain, rubles",
+      "title_ru": "Россия: 152-ФЗ"
     },
     {
       "id": "scale",
-      "title": "Масштаб (по запросу)",
+      "title": "Scale (on request)",
       "onDemand": true,
-      "checks": [89, 90, 92, 93, 94, 95, 96, 97, 98, 99, 101, 103, 104, 105]
+      "checks": [
+        89,
+        90,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        101,
+        103,
+        104,
+        105
+      ],
+      "title_ru": "Масштаб (по запросу)"
     }
   ],
   "foreignInfra": {
-    "deps": ["@supabase/supabase-js", "firebase", "@vercel/analytics", "@vercel/kv", "@vercel/postgres", "@neondatabase/serverless", "@planetscale/database", "convex", "@clerk/nextjs", "airtable", "@notionhq/client", "resend", "@sendgrid/mail", "mailgun.js"],
-    "files": ["vercel.json", "netlify.toml", "firebase.json", "supabase", "wrangler.toml", "fly.toml", "railway.json", "render.yaml"]
+    "deps": [
+      "@supabase/supabase-js",
+      "firebase",
+      "@vercel/analytics",
+      "@vercel/kv",
+      "@vercel/postgres",
+      "@neondatabase/serverless",
+      "@planetscale/database",
+      "convex",
+      "@clerk/nextjs",
+      "airtable",
+      "@notionhq/client",
+      "resend",
+      "@sendgrid/mail",
+      "mailgun.js"
+    ],
+    "files": [
+      "vercel.json",
+      "netlify.toml",
+      "firebase.json",
+      "supabase",
+      "wrangler.toml",
+      "fly.toml",
+      "railway.json",
+      "render.yaml"
+    ]
   }
 }

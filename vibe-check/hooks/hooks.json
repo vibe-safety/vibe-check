@@ -1,17 +1,25 @@
 {
-  "description": "vibe-check: защита от утечки ключей, выдуманных пакетов и опасных команд",
+  "description": "vibe-check: protection against leaked keys, made-up packages and dangerous commands",
   "hooks": {
     "PreToolUse": [
       {
         "matcher": "Write|Edit|MultiEdit|NotebookEdit",
         "hooks": [
-          { "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/guard-write.js\"", "timeout": 10 }
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/guard-write.js\"",
+            "timeout": 10
+          }
         ]
       },
       {
         "matcher": "Bash|PowerShell",
         "hooks": [
-          { "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/guard-bash.js\"", "timeout": 30 }
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/guard-bash.js\"",
+            "timeout": 30
+          }
         ]
       }
     ],
@@ -19,7 +27,11 @@
       {
         "matcher": "startup",
         "hooks": [
-          { "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/session-hint.js\"", "timeout": 10 }
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/session-hint.js\"",
+            "timeout": 10
+          }
         ]
       }
     ]

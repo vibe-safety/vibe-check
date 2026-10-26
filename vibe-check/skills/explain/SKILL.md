@@ -1,31 +1,31 @@
 ---
 name: explain
-description: Объясняет простыми словами любой пункт чек-листа безопасности vibe-check — по номеру или по слову (RLS, IDOR, XSS, вебхук, prompt injection, 152-ФЗ). Может сделать из пункта или раздела текст для поста в соцсетях. Используй, когда пользователь спрашивает, что значит пункт или термин безопасности, или просит текст для поста про безопасность.
-argument-hint: "<номер | слово> [пост]"
+description: Explains any vibe-check security checklist item in plain words, by number or keyword (RLS, IDOR, XSS, webhook, prompt injection, GDPR, 152-FZ). Can turn an item or a section into a social media post. Use when the user asks what a check or a security term means, or asks for a post about security (объясни пункт, текст для поста).
+argument-hint: "<number | word> [post]"
 ---
 
-# vibe-check: объяснение пункта
+# vibe-check: explaining a check
 
-Аргументы: `$ARGUMENTS`. Номер (`11`), диапазон или раздел (`раздел 3`), слово (`RLS`, `вебхук`). Слово «пост» в аргументах включает режим текста для соцсетей.
+Arguments: `$ARGUMENTS`. A number (`11`), a range or section (`section 3`), a word (`RLS`, `webhook`). The word "post" (or «пост») in the arguments turns on social media mode.
 
-Каталог: `<корень плагина>/catalog/checklist.md`, корень — на два уровня выше папки этого скилла (строка «Base directory for this skill»).
+Catalog: `<plugin root>/catalog/checklist.en.md` (Russian: `checklist.ru.md`); the root is two levels up from this skill's folder (the "Base directory for this skill" line). Answer **in the user's language** and use the matching checklist.
 
-## Обычный режим
+## Normal mode
 
-1. Найди пункт в каталоге по номеру или по слову (в названии, в «Что это», в английском термине).
-2. Объясни коротко:
-   - **Что это** — одно предложение, с бытовой аналогией;
-   - **Чем грозит** — конкретная история, как это ломается;
-   - **Как проверить у себя** — что открыть или что спросить у Claude;
-   - важность (🔴🟡🟢) и кому это нужно.
-3. Если ты в папке проекта и это быстро — скажи, как обстоят дела с этим пунктом именно здесь (одна-две строки), и предложи `/vibe-check:fix N`, если есть проблема.
+1. Find the item in the catalog by number or word (in the title, "What it is", or the English term).
+2. Explain briefly:
+   - **What it is**: one sentence with an everyday analogy;
+   - **What can happen**: a concrete story of how it breaks;
+   - **How to check yours**: what to open or what to ask Claude;
+   - priority (🔴🟡🟢) and who needs it.
+3. If you're in a project folder and it's quick, say in a line or two how this project is doing on that check, and suggest `/vibe-check:fix N` if there's a problem.
 
-## Режим «пост»
+## Post mode
 
-Сделай текст для Instagram / Telegram / VK:
-- Хук в первой строке: вопрос или короткая история, без кликбейта и без запугивания.
-- 3–7 пунктов простыми словами, по одному предложению, с эмодзи из каталога.
-- Одна строка «что сделать сегодня».
-- Если используешь факт или цифру — только из раздела «Факты-зацепки» каталога, с источником; цифры, помеченные там «проверь», отметь так же.
-- Без английских терминов без перевода. Длина — до 1500 знаков, если не попросили иначе.
-- Для карусели: по одному разделу на слайд, заголовок до 6 слов, 3–6 строк.
+Write a post for Instagram / Telegram / X / LinkedIn:
+- A hook in the first line: a question or a short story, no clickbait or scaremongering.
+- 3–7 points in plain words, one sentence each, with emoji from the catalog.
+- One line of "what to do today".
+- Facts or numbers only from the "Hook facts" section of the catalog, with the source; numbers marked "check" there must be marked the same way.
+- No untranslated jargon. Up to 1,500 characters unless asked otherwise.
+- For a carousel: one section per slide, a title up to 6 words, 3–6 lines.
